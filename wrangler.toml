@@ -1,5 +1,5 @@
 name = "gemini-ocr-worker"
-main = "index.js" # 主 Worker 脚本位于根目录
+main = "src/index.js" # 主 Worker 脚本位于 src/ 目录
 compatibility_date = "2025-09-07"
 compatibility_flags = [ "nodejs_compat" ]
 
