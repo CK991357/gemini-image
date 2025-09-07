@@ -7,3 +7,7 @@ compatibility_flags = [ "nodejs_compat" ]
 # Worker 会将所有前端文件从这个 "public" 目录提供服务。
 [assets]
 directory = "./public"
+
+# wrangler.toml (wrangler v3.88.0^)
+[observability.logs]
+enabled = true
