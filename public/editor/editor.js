@@ -1,6 +1,7 @@
 // editor.js: AI Image Editor main logic
 import { sendEditRequest } from './api.js';
 import {
+    centerImage,
     clearCanvas as clearCanvasArtboard,
     clearMaskLayer,
     exportImageLayerAsDataURL,
@@ -29,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const brushSizeSlider = document.getElementById('brushSize');
     const brushSizeValue = document.getElementById('brushSizeValue');
     const clearCanvasBtn = document.getElementById('resetCanvasBtn');
+    const resetViewBtn = document.getElementById('resetViewBtn'); // New button
     const editPromptInput = document.getElementById('editPrompt');
     const saveEditBtn = document.getElementById('saveEditBtn'); // Save button
     
@@ -98,6 +100,10 @@ document.addEventListener('DOMContentLoaded', () => {
         clearCanvasBtn.addEventListener('click', () => {
              // This only clears the mask layer, preserving the original image
              clearMaskLayer();
+        });
+
+        resetViewBtn.addEventListener('click', () => {
+            centerImage();
         });
 
         // --- Apply Edit Button ---
@@ -226,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
         eraserToolBtn.disabled = disabled;
         brushSizeSlider.disabled = disabled;
         clearCanvasBtn.disabled = disabled;
+        resetViewBtn.disabled = disabled;
     }
 
     // --- Helper Functions ---

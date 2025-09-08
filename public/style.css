@@ -808,3 +808,10 @@ footer {
     display: flex;
     flex-direction: column;
 }
+
+
+/* Apply touch-action only to the canvas container to prevent page scroll during drawing */
+/* while allowing other elements like sliders to function normally on mobile. */
+.canvas-container {
+    touch-action: none;
+}

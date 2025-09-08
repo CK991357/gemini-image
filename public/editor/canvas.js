@@ -25,12 +25,6 @@ export function initCanvas(containerId) {
 
    // Prevent scrolling on mobile when drawing on canvas
    // 这里的 preventDefault 可能会与双指缩放冲突，需要更精细的控制
-   container.addEventListener('touchmove', (e) => {
-       // Only prevent default if the target is the canvas itself, not other UI elements
-       if (e.target.tagName === 'CANVAS') {
-           e.preventDefault();
-       }
-   }, { passive: false });
 
     stage = new Konva.Stage({
         container: containerId,
@@ -96,7 +90,6 @@ function setupDrawingEventListeners() {
             isTwoFinger = true;
             lastDist = getDistance(touches[0], touches[1]);
             lastCenter = getCenter(touches[0], touches[1]);
-            e.evt.preventDefault(); // 阻止默认的滚动行为
         } else if (touches.length === 1 && !isTwoFinger && imageNode) {
             isDrawing = true;
             const pos = stage.getRelativePointerPosition();
@@ -110,7 +103,6 @@ function setupDrawingEventListeners() {
                 points: [pos.x, pos.y, pos.x, pos.y],
             });
             maskLayer.add(lastLine);
-            e.evt.preventDefault(); // 阻止默认的滚动行为
         }
     });
 
@@ -139,13 +131,11 @@ function setupDrawingEventListeners() {
             lastDist = currentDist;
             lastCenter = currentCenter;
             stage.batchDraw();
-            e.evt.preventDefault(); // 阻止默认的滚动行为
         } else if (isDrawing && touches.length === 1 && !isTwoFinger) {
             const pos = stage.getRelativePointerPosition();
             let newPoints = lastLine.points().concat([pos.x, pos.y]);
             lastLine.points(newPoints);
             maskLayer.batchDraw();
-            e.evt.preventDefault(); // 阻止默认的滚动行为
         }
     });
 
@@ -210,7 +200,7 @@ export function loadImage(imageUrl) {
 /**
  * Centers the imageNode within the stage.
  */
-function centerImage() {
+export function centerImage() {
     if (!imageNode || !stage) return;
 
     const stageWidth = stage.width();
