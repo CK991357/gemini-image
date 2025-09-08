@@ -1,13 +1,13 @@
 // editor.js: AI Image Editor main logic
 import { sendEditRequest } from './api.js';
 import {
-    centerImage,
     clearCanvas as clearCanvasArtboard,
     clearMaskLayer,
     exportImageLayerAsDataURL,
     exportLayersAsDataURL,
     initCanvas,
     loadImage,
+    resetView,
     setBrushSize,
     setTool
 } from './canvas.js';
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         resetViewBtn.addEventListener('click', () => {
-            centerImage();
+            resetView();
         });
 
         // --- Apply Edit Button ---

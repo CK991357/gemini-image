@@ -200,7 +200,7 @@ export function loadImage(imageUrl) {
 /**
  * Centers the imageNode within the stage.
  */
-export function centerImage() {
+function centerImage() {
     if (!imageNode || !stage) return;
 
     const stageWidth = stage.width();
@@ -222,6 +222,16 @@ export function centerImage() {
     });
 
     imageLayer.batchDraw();
+}
+
+/**
+ * Resets the stage's scale and position to the initial state.
+ */
+export function resetView() {
+    if (!stage) return;
+    stage.scale({ x: 1, y: 1 });
+    stage.position({ x: 0, y: 0 });
+    stage.batchDraw();
 }
 
 /**
