@@ -32,7 +32,7 @@ router.post('/api/gemini', async (request, env) => {
       headers: response.headers
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: error.message, stack: error.stack }), {
       status: 500, headers: { 'Content-Type': 'application/json' }
     });
   }
@@ -67,7 +67,7 @@ router.post('/api/siliconflow', async (request, env) => {
       headers: response.headers
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: error.message, stack: error.stack }), {
       status: 500, headers: { 'Content-Type': 'application/json' }
     });
   }
@@ -83,5 +83,15 @@ router.all('*', (request, env) => {
 });
 
 export default {
-  fetch: (request, env, ctx) => router.handle(request, env, ctx)
+  fetch: async (request, env, ctx) => {
+    try {
+      return await router.handle(request, env, ctx);
+    } catch (error) {
+      console.error("Unhandled error in Worker:", error);
+      return new Response(JSON.stringify({ error: error.message, stack: error.stack }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+  }
 };
