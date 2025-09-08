@@ -90,7 +90,7 @@ router.post('/api/siliconflow', async (request, env) => {
  * 这部分用于处理静态资源（HTML, CSS, JS 文件等）
  * `env.ASSETS.fetch` 是由 wrangler.toml 中的 [assets] 配置自动提供的
  */
-router.all('*', (request, env) => {
+router.all('*', async (request, env) => {
   // 诊断代码：检查 ASSETS 绑定是否存在
   if (!env.ASSETS) {
     // 如果绑定丢失，返回一个明确的错误信息
@@ -99,10 +99,10 @@ router.all('*', (request, env) => {
       { status: 500 }
     );
   }
-  
+
   // 如果绑定存在，正常处理静态资源
   try {
-    return env.ASSETS.fetch(request);
+    return await env.ASSETS.fetch(request);
   } catch (error) {
     // 捕获 env.ASSETS.fetch 可能抛出的异常
     console.error('Error fetching static asset:', error);
