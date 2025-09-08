@@ -18,14 +18,20 @@ export default {
           });
         }
 
-        const body = await request.text();
+        const originalBody = await request.json();
+        // 强制添加 responseModalities 以确保 API 返回图片数据
+        const modifiedBody = {
+          ...originalBody,
+          responseModalities: ["TEXT", "IMAGE"]
+        };
         const headers = new Headers(request.headers);
         headers.set('Authorization', `Bearer ${authKey}`);
+        headers.set('Content-Type', 'application/json'); // 确保内容类型为 JSON
 
         const response = await fetch(`https://geminiapim.10110531.xyz/chat/completions`, {
           method: 'POST',
           headers: headers,
-          body: body
+          body: JSON.stringify(modifiedBody)
         });
 
         return new Response(response.body, {
