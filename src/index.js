@@ -32,7 +32,13 @@ router.post('/api/gemini', async (request, env) => {
       headers: response.headers
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message, stack: error.stack }), {
+    // 打印更详细的错误信息到控制台
+    console.error('Error in /api/gemini:', error);
+    return new Response(JSON.stringify({
+      error: 'An internal error occurred while contacting the Gemini API.',
+      details: error.message,
+      stack: error.stack,
+    }), {
       status: 500, headers: { 'Content-Type': 'application/json' }
     });
   }
@@ -67,7 +73,13 @@ router.post('/api/siliconflow', async (request, env) => {
       headers: response.headers
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message, stack: error.stack }), {
+    // 打印更详细的错误信息到控制台
+    console.error('Error in /api/siliconflow:', error);
+    return new Response(JSON.stringify({
+      error: 'An internal error occurred while contacting the Siliconflow API.',
+      details: error.message,
+      stack: error.stack,
+    }), {
       status: 500, headers: { 'Content-Type': 'application/json' }
     });
   }
@@ -79,19 +91,25 @@ router.post('/api/siliconflow', async (request, env) => {
  * `env.ASSETS.fetch` 是由 wrangler.toml 中的 [assets] 配置自动提供的
  */
 router.all('*', (request, env) => {
-  return env.ASSETS.fetch(request);
+  // 诊断代码：检查 ASSETS 绑定是否存在
+  if (!env.ASSETS) {
+    // 如果绑定丢失，返回一个明确的错误信息
+    return new Response(
+      'Fatal Error: Static asset binding (env.ASSETS) is missing. This indicates a problem with the deployment configuration. Please check your wrangler.toml and try redeploying.',
+      { status: 500 }
+    );
+  }
+  
+  // 如果绑定存在，正常处理静态资源
+  try {
+    return env.ASSETS.fetch(request);
+  } catch (error) {
+    // 捕获 env.ASSETS.fetch 可能抛出的异常
+    console.error('Error fetching static asset:', error);
+    return new Response(`Error fetching static asset: ${error.message}`, { status: 500 });
+  }
 });
 
 export default {
-  fetch: async (request, env, ctx) => {
-    try {
-      return await router.handle(request, env, ctx);
-    } catch (error) {
-      console.error("Unhandled error in Worker:", error);
-      return new Response(JSON.stringify({ error: error.message, stack: error.stack }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-  }
+  fetch: (request, env, ctx) => router.handle(request, env, ctx)
 };
