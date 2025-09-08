@@ -1,4 +1,4 @@
-name = "gemini-ocr-worker"
+name = "gemini-image"
 main = "src/index.js" # 主 Worker 脚本位于 src/ 目录
 compatibility_date = "2025-09-07"
 compatibility_flags = [ "nodejs_compat" ]
