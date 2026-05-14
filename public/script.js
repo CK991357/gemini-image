@@ -525,7 +525,7 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     async function callGeminiAPI(imageData, promptText) { // 移除 apiKey 参数
         const requestData = {
-            model: "gemini-2.0-flash",
+            model: "gemini-2.5-flash-lite",
             messages: [
                 {
                     role: "user",
@@ -679,7 +679,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const systemPrompt = `作为AI文生图提示词架构师，对原始提示词进行详细扩写，使其更具描述性、细节丰富，并包含艺术风格、光照、构图等元素，以生成高质量图像。直接返回扩写后的提示词，不需要任何解释或描述。`;
         
         const requestData = {
-            model: "gemini-2.0-flash",
+            model: "gemini-2.5-flash-lite",
             messages: [
                 {
                     role: "system",
